@@ -65,17 +65,38 @@ body.search-mode-active .search-container {
     background: #f7f3ea;
     z-index: 9999;
     overflow-y: auto;
-    padding: 20px;
+    padding: 40px 20px;
 }
 .global-search-results-section.active {
     display: block;
 }
 .global-search-results-grid {
-    max-width: 1280px;
+    max-width: 1400px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 28px;
+    gap: 40px;
+}
+
+@media (max-width: 1024px) {
+    .global-search-results-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .global-search-results-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .global-search-results-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
 }
 .global-result-card {
     background: transparent;
@@ -87,6 +108,7 @@ body.search-mode-active .search-container {
     flex-direction: column;
     height: 100%;
     cursor: pointer;
+    pointer-events: auto;
 }
 .global-result-card:hover {
     transform: translateY(-5px);
@@ -121,7 +143,8 @@ body.search-mode-active .search-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
 }
 .global-result-desc {
     font-size: 12px;
@@ -456,13 +479,23 @@ body.search-mode-active .search-container {
     border: none;
     cursor: pointer;
     padding: 8px;
-    border-radius: 0;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.search-close-btn:hover {
+    background: #f0e7db;
 }
 .search-close-btn svg {
     width: 22px;
     height: 22px;
     stroke: #5c3e2b;
     stroke-width: 1.5;
+}
+.navbar.search-mode .search-close-btn {
+    display: flex;
 }
 .suggestions-dropdown {
     position: absolute;
@@ -511,6 +544,30 @@ body.search-mode-active .search-container {
 }
 .navbar.search-mode .search-container {
     display: flex;
+}
+
+@media (max-width: 640px) {
+    .search-container {
+        gap: 8px;
+    }
+    .search-input {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    .search-submit-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    .search-close-btn {
+        padding: 6px;
+    }
+    .search-close-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    .suggestions-dropdown {
+        max-height: 200px;
+    }
 }
 
 /* Ad Slider Bar */
@@ -2017,6 +2074,29 @@ body.search-mode-active .search-container {
     color: #4a3422;
 }
 
+@media (max-width: 640px) {
+    .login-required-modal {
+        padding: 20px;
+    }
+    .login-required-card {
+        padding: 24px;
+        max-width: 90%;
+        border-radius: 20px;
+    }
+    .login-required-card h3 {
+        font-size: 18px;
+    }
+    .login-required-card p {
+        font-size: 13px;
+        margin-bottom: 16px;
+    }
+    .login-required-card button {
+        padding: 10px 16px;
+        font-size: 14px;
+        margin: 0 4px;
+    }
+}
+
 @media (max-width: 1024px) {
     .product-grid { gap: 32px; }
     .product-title-main { font-size: 28px; }
@@ -2828,6 +2908,11 @@ body.search-mode-active .search-container {
     100% { opacity: 0; transform: translateY(20px); }
 }
 
+@keyframes slideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 @media (max-width: 768px) {
     .checkout-grid {
         grid-template-columns: 1fr;
@@ -3157,6 +3242,18 @@ body.search-mode-active .search-container {
     max-width: 500px;
     width: 90%;
     position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+@media (max-width: 640px) {
+    .modal-content {
+        padding: 20px;
+        max-width: 95%;
+        border-radius: 8px;
+    }
+    .modal-close {
+        font-size: 24px;
+    }
 }
 .modal-close {
     position: absolute;
@@ -3177,6 +3274,17 @@ body.search-mode-active .search-container {
     border: 1px solid #d6c8b2;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 16px;
+}
+.promo-input:focus,
+.review-input:focus {
+    border-color: #5c3e2b;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(92, 62, 43, 0.1);
+}
+.error-input {
+    border-color: #c0392b !important;
+    background-color: #ffebee;
 }
 .stars {
     display: flex;
@@ -3273,7 +3381,6 @@ body.search-mode-active .search-container {
 <!-- Global Search Results -->
 <div class="global-search-results-section" id="globalSearchResultsSection">
     <div class="global-search-results-grid" id="globalSearchResultsGrid"></div>
-    <button class="global-search-close" id="globalSearchCloseBtn">Close Search</button>
 </div>
 
 <!-- Ad Slider Bar -->
@@ -3424,6 +3531,7 @@ body.search-mode-active .search-container {
                 <div class="checkout-card-body">
                     <div class="checkout-product-row"><span class="checkout-product-name" id="checkoutProductName">Oxervel Floor Cleaner</span><span class="checkout-product-price" id="checkoutProductPrice">₹129</span></div>
                     <div class="checkout-total-row"><span>Subtotal</span><span id="checkoutSubtotal">₹129</span></div>
+                    <div class="checkout-total-row" id="checkoutDiscountRow" style="display: none;"><span>Discount</span><span id="checkoutDiscount">-₹0</span></div>
                     <div class="checkout-total-row"><span>Shipping</span><span>Free</span></div>
                     <div class="checkout-total-row checkout-grand-total"><span>Total</span><span id="checkoutGrandTotal">₹129</span></div>
                 </div>
@@ -4014,6 +4122,18 @@ function checkoutFromCart() {
 
 function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
 
+function validateEmail(email) { const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return regex.test(email); }
+
+function validatePhone(phone) { const regex = /^[0-9]{10}$/; return regex.test(phone.replace(/[^0-9]/g, '')); }
+
+function validateForm(fullName, phone, email, address) {
+    if (!fullName || fullName.trim().length < 3) return 'Please enter a valid full name (min 3 characters)';
+    if (!phone || !validatePhone(phone)) return 'Please enter a valid 10-digit phone number';
+    if (!email || !validateEmail(email)) return 'Please enter a valid email address';
+    if (!address || address.trim().length < 10) return 'Please enter a valid delivery address (min 10 characters)';
+    return null;
+}
+
 function renderHomeProducts() {
     const grid = document.getElementById('originalProductsGrid');
     if(!grid) return;
@@ -4131,28 +4251,181 @@ function onAccountLogout() {
 }
 
 // CHECKOUT FUNCTIONS
-const UPI_ID = "8081865350-3@ybl", NAME = "Oxervel Industry", BOT_TOKEN = "8767268068:AAFjJ2vreTe4YxdANS1cRmIatjxLNocCRf8", CHAT_ID = "8128967581", GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfcybybJMvArMcPyUaSjPDQn1RWBmM1Y4kzZ6djxjpBHTD8uaJXQK4zqLiHoX/exec";
+const UPI_ID = "8081865350-3@ybl", NAME = "Oxervel Industry", BOT_TOKEN = "8767268068:AAFjJ2vreTe4YxdANS1cRmIatjxLNocCRf8", CHAT_ID = "8128967581", GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlsToMXT9aMZJ1eqwqWX9-JPjptNxOr7rYRYu5y4OmqjVW_xP5tPdO5S3mJ5Vy8-2-/exec";
 let checkoutSelectedProduct = { name: "Oxervel Floor Cleaner", price: 129 };
 function showCheckoutConfetti() { for (let i = 0; i < 100; i++) { const confetti = document.createElement('div'); confetti.classList.add('confetti'); confetti.style.left = Math.random() * 100 + '%'; confetti.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`; confetti.style.width = Math.random() * 8 + 4 + 'px'; confetti.style.height = Math.random() * 8 + 4 + 'px'; confetti.style.animationDuration = Math.random() * 2 + 1 + 's'; confetti.style.animationDelay = Math.random() * 0.5 + 's'; document.body.appendChild(confetti); setTimeout(() => confetti.remove(), 2000); } }
 function showCheckoutCongratulations(orderId) { const modal = document.getElementById('checkoutCongratsModal'); const orderIdSpan = document.getElementById('checkoutCongratsOrderId'); orderIdSpan.innerText = `Order ID: ${orderId}`; modal.classList.add('active'); showCheckoutConfetti(); setTimeout(() => { modal.classList.remove('active'); showPage('account'); }, 3000); }
 async function sendTelegramNotification(orderData) { const message = `🆕 *NEW ORDER RECEIVED!* 🛍️\n\n━━━━━━━━━━━━━━━━━━━━\n🆔 *Order ID:* ${orderData.orderNumber}\n👤 *Customer:* ${orderData.customerName}\n📞 *Phone:* ${orderData.customerPhone}\n📍 *Address:* ${orderData.address}\n━━━━━━━━━━━━━━━━━━━━\n🛒 *Product:* ${orderData.productName}\n💰 *Price:* ₹${orderData.total}\n💳 *Payment:* ${orderData.paymentMethod}\n━━━━━━━━━━━━━━━━━━━━\n⏰ *Time:* ${new Date().toLocaleString()}\n\n🙏 *Thank you for your order!*`; const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`; try { await fetch(url); } catch(error) { console.log("Telegram error:", error); } }
-async function saveToGoogleSheets(orderData) { const data = { orderId: orderData.orderNumber, customerName: orderData.customerName, phone: orderData.customerPhone, address: orderData.address, productName: orderData.productName, quantity: 1, price: orderData.total, total: orderData.total, paymentMethod: orderData.paymentMethod }; try { await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }); } catch(e) {} }
+async function saveToGoogleSheets(orderData) { 
+    const data = { 
+        orderId: orderData.orderNumber, 
+        customerName: orderData.customerName, 
+        phone: orderData.customerPhone, 
+        address: orderData.address, 
+        productName: orderData.productName, 
+        quantity: 1, 
+        price: orderData.total, 
+        total: orderData.total, 
+        paymentMethod: orderData.paymentMethod,
+        timestamp: new Date().toISOString()
+    }; 
+    try { 
+        const response = await fetch(GOOGLE_SCRIPT_URL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        }); 
+        console.log('Google Sheets data saved successfully');
+    } catch(e) { 
+        console.error('Google Sheets sync error:', e);
+    } 
+}
 function saveToLocalStorage(orderData) { const record = { orderId: orderData.orderNumber, customerName: orderData.customerName, phone: orderData.customerPhone, address: orderData.address, productName: orderData.productName, quantity: 1, price: orderData.total, total: orderData.total, paymentMethod: orderData.paymentMethod, status: "Processing", dateTime: new Date().toLocaleString() }; const existing = localStorage.getItem('oxervel_orders'); let orders = existing ? JSON.parse(existing) : []; orders.unshift({ ...record, id: Date.now() }); localStorage.setItem('oxervel_orders', JSON.stringify(orders)); }
 function saveToAccountDashboard(orderData) { const accountOrder = { id: `ORD-${Date.now()}`, orderNumber: orderData.orderNumber, date: new Date().toISOString(), total: orderData.total, status: "Processing", productName: orderData.productName, paymentMethod: orderData.paymentMethod, address: orderData.address, customerName: orderData.customerName, customerPhone: orderData.customerPhone, customerEmail: orderData.customerEmail }; const existingOrders = localStorage.getItem('completedOrder'); if (existingOrders) { let orders = JSON.parse(existingOrders); if (Array.isArray(orders)) { orders.push(accountOrder); localStorage.setItem('completedOrder', JSON.stringify(orders)); } else { localStorage.setItem('completedOrder', JSON.stringify([accountOrder])); } } else { localStorage.setItem('completedOrder', JSON.stringify([accountOrder])); } localStorage.setItem('latestOrder', JSON.stringify(accountOrder)); }
-function showCheckoutToast(msg) { let toast = document.getElementById('checkoutToast'); if (!toast) { toast = document.createElement('div'); toast.id = 'checkoutToast'; document.body.appendChild(toast); } toast.innerText = msg; toast.style.display = 'block'; setTimeout(() => toast.style.display = 'none', 2000); }
+function showCheckoutToast(msg, isError = false) { 
+    let toast = document.getElementById('checkoutToast'); 
+    if (!toast) { 
+        toast = document.createElement('div'); 
+        toast.id = 'checkoutToast'; 
+        toast.style.cssText = 'position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2e7d32; color: white; padding: 16px 24px; border-radius: 8px; z-index: 9999; font-weight: 600; max-width: 90%; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: slideUp 0.3s ease;';
+        document.body.appendChild(toast); 
+    } 
+    toast.innerText = msg; 
+    toast.style.background = isError ? '#c0392b' : '#2e7d32';
+    toast.style.display = 'block'; 
+    setTimeout(() => toast.style.display = 'none', 3000); 
+}
 function payViaUPI(amount, orderId) { const note = `Order ${orderId} - Oxervel`; const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(NAME)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`; window.location.href = upiUrl; showCheckoutToast(`Opening UPI app... Please pay ₹${amount}`); }
 async function finalizeOrder(orderData, isUPI = false) { saveToLocalStorage(orderData); saveToAccountDashboard(orderData); await saveToGoogleSheets(orderData); await sendTelegramNotification(orderData); if (window.FinoraAPI && typeof window.FinoraAPI.addOrder === 'function') window.FinoraAPI.addOrder(orderData); localStorage.removeItem('checkoutProduct'); localStorage.removeItem('checkoutCart'); showCheckoutCongratulations(orderData.orderNumber); }
-function initCheckoutPage() { try { const checkoutProduct = localStorage.getItem('checkoutProduct'); if (checkoutProduct) { const productData = JSON.parse(checkoutProduct); checkoutSelectedProduct.name = productData.name || "Oxervel Floor Cleaner"; checkoutSelectedProduct.price = parseInt(productData.price) || 129; } } catch(e) {} document.getElementById('checkoutProductName').innerText = checkoutSelectedProduct.name; document.getElementById('checkoutProductPrice').innerText = `₹${checkoutSelectedProduct.price}`; document.getElementById('checkoutSubtotal').innerText = `₹${checkoutSelectedProduct.price}`; document.getElementById('checkoutGrandTotal').innerText = `₹${checkoutSelectedProduct.price}`; const paymentOptions = document.querySelectorAll('.checkout-payment-option'); const upiPayBtn = document.getElementById('checkoutUpiPayBtn'); const paidBtn = document.getElementById('checkoutPaidBtn'); const confirmBtn = document.getElementById('checkoutConfirmOrderBtn'); paymentOptions.forEach(option => { const radio = option.querySelector('input[type="radio"]'); option.addEventListener('click', () => { paymentOptions.forEach(opt => opt.classList.remove('selected')); option.classList.add('selected'); radio.checked = true; if (radio.value.includes('UPI')) { upiPayBtn.style.display = 'flex'; confirmBtn.style.display = 'none'; paidBtn.style.display = 'none'; } else { upiPayBtn.style.display = 'none'; confirmBtn.style.display = 'flex'; paidBtn.style.display = 'none'; } }); if (radio.checked) { option.classList.add('selected'); if (radio.value.includes('UPI')) { upiPayBtn.style.display = 'flex'; confirmBtn.style.display = 'none'; } } }); document.getElementById('checkoutCod').checked = true; document.querySelector('[data-method="cod"]').classList.add('selected'); upiPayBtn.style.display = 'none'; confirmBtn.style.display = 'flex'; upiPayBtn.onclick = () => { const tempOrderId = `OX${Date.now()}`; payViaUPI(checkoutSelectedProduct.price, tempOrderId); setTimeout(() => { upiPayBtn.style.display = 'none'; paidBtn.style.display = 'flex'; showCheckoutToast("After payment, click 'I have paid' button"); }, 1000); }; paidBtn.onclick = async () => { const fullName = document.getElementById('checkoutFullName').value.trim(); const phone = document.getElementById('checkoutPhone').value.trim(); const email = document.getElementById('checkoutEmail').value.trim(); const address = document.getElementById('checkoutAddress').value.trim(); if (!fullName) { alert('Please enter your full name'); return; } if (!phone) { alert('Please enter your phone number'); return; } if (!email) { alert('Please enter your email address'); return; } if (!address) { alert('Please enter your delivery address'); return; } const orderData = { id: `ORD-${Date.now()}`, orderNumber: `OX${Math.floor(Math.random() * 100000)}`, date: new Date().toISOString(), total: checkoutSelectedProduct.price, status: "Processing", productName: checkoutSelectedProduct.name, paymentMethod: "UPI / GPay / PhonePe", address: address, customerName: fullName, customerPhone: phone, customerEmail: email }; await finalizeOrder(orderData, true); }; confirmBtn.onclick = async () => { const fullName = document.getElementById('checkoutFullName').value.trim(); const phone = document.getElementById('checkoutPhone').value.trim(); const email = document.getElementById('checkoutEmail').value.trim(); const address = document.getElementById('checkoutAddress').value.trim(); if (!fullName) { alert('Please enter your full name'); return; } if (!phone) { alert('Please enter your phone number'); return; } if (!email) { alert('Please enter your email address'); return; } if (!address) { alert('Please enter your delivery address'); return; } const orderData = { id: `ORD-${Date.now()}`, orderNumber: `OX${Math.floor(Math.random() * 100000)}`, date: new Date().toISOString(), total: checkoutSelectedProduct.price, status: "Processing", productName: checkoutSelectedProduct.name, paymentMethod: "Cash on Delivery", address: address, customerName: fullName, customerPhone: phone, customerEmail: email }; await finalizeOrder(orderData, false); }; document.getElementById('checkoutBackLink').onclick = () => showPage('home'); }
+function initCheckoutPage() { 
+    try { 
+        const checkoutProduct = localStorage.getItem('checkoutProduct'); 
+        if (checkoutProduct) { 
+            const productData = JSON.parse(checkoutProduct); 
+            checkoutSelectedProduct.name = productData.name || "Oxervel Floor Cleaner"; 
+            checkoutSelectedProduct.price = parseInt(productData.price) || 129; 
+        } 
+    } catch(e) {} 
+    let price = checkoutSelectedProduct.price;
+    const appliedPromo = localStorage.getItem('appliedPromo');
+    let discount = 0;
+    if (appliedPromo && PROMO_CODES[appliedPromo]) {
+        discount = price * PROMO_CODES[appliedPromo];
+        price -= discount;
+    }
+    document.getElementById('checkoutProductName').innerText = checkoutSelectedProduct.name; 
+    document.getElementById('checkoutProductPrice').innerText = `₹${checkoutSelectedProduct.price}`; 
+    document.getElementById('checkoutSubtotal').innerText = `₹${checkoutSelectedProduct.price}`; 
+    if (discount > 0) {
+        document.getElementById('checkoutDiscountRow').style.display = 'flex';
+        document.getElementById('checkoutDiscount').innerText = `-₹${discount.toFixed(2)}`;
+    } else {
+        document.getElementById('checkoutDiscountRow').style.display = 'none';
+    }
+    document.getElementById('checkoutGrandTotal').innerText = `₹${price.toFixed(2)}`; 
+    const paymentOptions = document.querySelectorAll('.checkout-payment-option'); 
+    const upiPayBtn = document.getElementById('checkoutUpiPayBtn'); 
+    const paidBtn = document.getElementById('checkoutPaidBtn'); 
+    const confirmBtn = document.getElementById('checkoutConfirmOrderBtn'); 
+    paymentOptions.forEach(option => { 
+        const radio = option.querySelector('input[type="radio"]'); 
+        option.addEventListener('click', () => { 
+            paymentOptions.forEach(opt => opt.classList.remove('selected')); 
+            option.classList.add('selected'); 
+            radio.checked = true; 
+            if (radio.value.includes('UPI')) { 
+                upiPayBtn.style.display = 'flex'; 
+                confirmBtn.style.display = 'none'; 
+                paidBtn.style.display = 'none'; 
+            } else { 
+                upiPayBtn.style.display = 'none'; 
+                confirmBtn.style.display = 'flex'; 
+                paidBtn.style.display = 'none'; 
+            } 
+        }); 
+        if (radio.checked) { 
+            option.classList.add('selected'); 
+            if (radio.value.includes('UPI')) { 
+                upiPayBtn.style.display = 'flex'; 
+                confirmBtn.style.display = 'none'; 
+            } 
+        } 
+    }); 
+    document.getElementById('checkoutCod').checked = true; 
+    document.querySelector('[data-method="cod"]').classList.add('selected'); 
+    upiPayBtn.style.display = 'none'; 
+    confirmBtn.style.display = 'flex'; 
+    upiPayBtn.onclick = () => { 
+        const tempOrderId = `OX${Date.now()}`; 
+        payViaUPI(checkoutSelectedProduct.price, tempOrderId); 
+        setTimeout(() => { 
+            upiPayBtn.style.display = 'none'; 
+            paidBtn.style.display = 'flex'; 
+            showCheckoutToast("After payment, click 'I have paid' button"); 
+        }, 1000); 
+    }; 
+    paidBtn.onclick = async () => { 
+        const fullName = document.getElementById('checkoutFullName').value; 
+        const phone = document.getElementById('checkoutPhone').value; 
+        const email = document.getElementById('checkoutEmail').value; 
+        const address = document.getElementById('checkoutAddress').value; 
+        const error = validateForm(fullName, phone, email, address);
+        if (error) { showCheckoutToast(error); return; } 
+        let total = checkoutSelectedProduct.price;
+        const appliedPromo = localStorage.getItem('appliedPromo');
+        if (appliedPromo && PROMO_CODES[appliedPromo]) {
+            total -= total * PROMO_CODES[appliedPromo];
+        }
+        const orderData = { id: `ORD-${Date.now()}`, orderNumber: `OX${Math.floor(Math.random() * 100000)}`, date: new Date().toISOString(), total: total, status: "Processing", productName: checkoutSelectedProduct.name, paymentMethod: "UPI / GPay / PhonePe", address: address, customerName: fullName, customerPhone: phone, customerEmail: email }; 
+        await finalizeOrder(orderData, true); 
+    }; 
+    confirmBtn.onclick = async () => { 
+        const fullName = document.getElementById('checkoutFullName').value; 
+        const phone = document.getElementById('checkoutPhone').value; 
+        const email = document.getElementById('checkoutEmail').value; 
+        const address = document.getElementById('checkoutAddress').value; 
+        const error = validateForm(fullName, phone, email, address);
+        if (error) { showCheckoutToast(error); return; } 
+        let total = checkoutSelectedProduct.price;
+        const appliedPromo = localStorage.getItem('appliedPromo');
+        if (appliedPromo && PROMO_CODES[appliedPromo]) {
+            total -= total * PROMO_CODES[appliedPromo];
+        }
+        const orderData = { id: `ORD-${Date.now()}`, orderNumber: `OX${Math.floor(Math.random() * 100000)}`, date: new Date().toISOString(), total: total, status: "Processing", productName: checkoutSelectedProduct.name, paymentMethod: "Cash on Delivery", address: address, customerName: fullName, customerPhone: phone, customerEmail: email }; 
+        await finalizeOrder(orderData, false); 
+    }; 
+    document.getElementById('checkoutBackLink').onclick = () => showPage('home'); 
+} 
 
 // GLOBAL SEARCH
 function searchProductsGlobal(query) { if(!query || !query.trim()) return []; const q = query.trim().toLowerCase(); return PRODUCTS.filter(p => p.name.toLowerCase().includes(q)); }
 function getSuggestionsGlobal(query) { if(!query || !query.trim()) return []; const q = query.trim().toLowerCase(); return PRODUCTS.filter(p => p.name.toLowerCase().includes(q)).map(p => p.name); }
-function renderGlobalSearchResults(products) { const grid = document.getElementById("globalSearchResultsGrid"); if(!grid) return; if(products.length === 0) { grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:60px;">No products found.</div>'; return; } grid.innerHTML = products.map(p => `<div class="global-result-card" data-product-id="${p.id}" data-order-page="${p.orderPageId}"><div class="global-result-visual">${p.category === "combo" ? '<div class="combo-badge">COMBO PACK</div>' : ''}<img src="${p.imageUrl}" onerror="this.src='${p.fallback}'"></div><div class="global-result-info"><div class="global-result-desc">${p.description}</div><div class="global-result-price-container"><span class="global-result-old-price">${p.oldPrice}</span><span class="global-result-new-price">${p.newPrice}</span></div><button class="global-add-to-cart-btn" data-id="${p.id}" data-price="${p.newPrice}" data-name="${p.name}" data-image="${p.imageUrl}"><svg class="cart-icon-svg-outline" viewBox="0 0 24 24" stroke="currentColor" fill="none"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Add to Cart</button></div></div>`).join(''); document.querySelectorAll('.global-add-to-cart-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); addToCart(parseInt(btn.getAttribute('data-id')), parseInt(btn.getAttribute('data-price')), btn.getAttribute('data-name'), btn.getAttribute('data-image')); })); document.querySelectorAll('.global-result-card').forEach(card => card.addEventListener('click', (e) => { if(e.target.closest('.global-add-to-cart-btn')) return; const orderPageId = card.getAttribute('data-order-page'); if(orderPageId) showPage(orderPageId); })); }
-function showSuggestionsGlobal() { const input = document.getElementById("searchInput"); const query = input.value; const dropdown = document.getElementById("suggestionsDropdown"); const suggestions = getSuggestionsGlobal(query); if(suggestions.length && query.trim()) { dropdown.innerHTML = suggestions.map(s => `<div class="suggestion-item" data-suggestion="${s}">${s}</div>`).join(''); dropdown.classList.add("active"); document.querySelectorAll('.suggestion-item').forEach(item => { item.onclick = () => { document.getElementById("searchInput").value = item.getAttribute('data-suggestion'); dropdown.classList.remove("active"); handleGlobalSearch(); }; }); } else { dropdown.classList.remove("active"); } }
+function renderGlobalSearchResults(products) { const grid = document.getElementById("globalSearchResultsGrid"); if(!grid) return; if(products.length === 0) { grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:60px;">No products found.</div>'; return; } grid.innerHTML = products.map(p => `<div class="global-result-card" data-product-id="${p.id}" data-order-page="${p.orderPageId}"><div class="global-result-visual">${p.category === "combo" ? '<div class="combo-badge">COMBO PACK</div>' : ''}<img src="${p.imageUrl}" onerror="this.src='${p.fallback}'"></div><div class="global-result-info"><div class="global-result-desc">${p.description}</div><div class="global-result-price-container"><span class="global-result-old-price">${p.oldPrice}</span><span class="global-result-new-price">${p.newPrice}</span></div><button class="global-add-to-cart-btn" data-id="${p.id}" data-price="${p.newPrice}" data-name="${p.name}" data-image="${p.imageUrl}"><svg class="cart-icon-svg-outline" viewBox="0 0 24 24" stroke="currentColor" fill="none"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Add to Cart</button></div></div>`).join(''); document.querySelectorAll('.global-add-to-cart-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); addToCart(parseInt(btn.getAttribute('data-id')), parseInt(btn.getAttribute('data-price')), btn.getAttribute('data-name'), btn.getAttribute('data-image')); })); document.querySelectorAll('.global-result-card').forEach(card => card.addEventListener('click', (e) => { if(e.target.closest('.global-add-to-cart-btn')) return; const orderPageId = card.getAttribute('data-order-page'); if(orderPageId) { deactivateGlobalSearch(); showPage(orderPageId); } })); }
+function showSuggestionsGlobal() { 
+    const input = document.getElementById("searchInput"); 
+    const query = input.value; 
+    const dropdown = document.getElementById("suggestionsDropdown"); 
+    const suggestions = getSuggestionsGlobal(query); 
+    if(suggestions.length && query.trim()) { 
+        dropdown.innerHTML = suggestions.map(s => `<div class="suggestion-item" data-suggestion="${s}">${s}</div>`).join(''); 
+        dropdown.classList.add("active"); 
+        document.querySelectorAll('.suggestion-item').forEach(item => { 
+            item.onclick = (e) => { 
+                e.stopPropagation();
+                document.getElementById("searchInput").value = item.getAttribute('data-suggestion'); 
+                dropdown.classList.remove("active"); 
+                handleGlobalSearch(); 
+            }; 
+        }); 
+    } else { 
+        dropdown.classList.remove("active"); 
+    } 
+}
 function hideSuggestionsGlobal() { setTimeout(() => { document.getElementById("suggestionsDropdown")?.classList.remove("active"); }, 200); }
-function handleGlobalSearch() { const query = document.getElementById("searchInput").value; const results = searchProductsGlobal(query); renderGlobalSearchResults(results); document.getElementById("suggestionsDropdown")?.classList.remove("active"); document.getElementById("globalSearchResultsSection").classList.add("active"); document.getElementById("globalSearchCloseBtn").classList.add("show"); document.getElementById("homePage").style.display = 'none'; document.getElementById("productsPage").style.display = 'none'; document.getElementById("cartPage").style.display = 'none'; document.getElementById("checkoutPage").style.display = 'none'; document.getElementById("accountPage").style.display = 'none'; document.getElementById("adSliderBar").style.display = 'none'; document.getElementById("roseOrderPage").style.display = 'none'; document.getElementById("comboRoseOrderPage").style.display = 'none'; document.getElementById("jasmineOrderPage").style.display = 'none'; document.getElementById("comboJasmineOrderPage").style.display = 'none'; document.getElementById("blackOrderPage").style.display = 'none'; document.getElementById("comboBlackOrderPage").style.display = 'none'; }
+function handleGlobalSearch() { const query = document.getElementById("searchInput").value; const results = searchProductsGlobal(query); renderGlobalSearchResults(results); document.getElementById("suggestionsDropdown")?.classList.remove("active"); document.getElementById("globalSearchResultsSection").classList.add("active"); document.getElementById("homePage").style.display = 'none'; document.getElementById("productsPage").style.display = 'none'; document.getElementById("cartPage").style.display = 'none'; document.getElementById("checkoutPage").style.display = 'none'; document.getElementById("accountPage").style.display = 'none'; document.getElementById("adSliderBar").style.display = 'none'; document.getElementById("roseOrderPage").style.display = 'none'; document.getElementById("comboRoseOrderPage").style.display = 'none'; document.getElementById("jasmineOrderPage").style.display = 'none'; document.getElementById("comboJasmineOrderPage").style.display = 'none'; document.getElementById("blackOrderPage").style.display = 'none'; document.getElementById("comboBlackOrderPage").style.display = 'none'; }
 function activateGlobalSearch() { document.body.classList.add('search-mode-active'); document.getElementById("navbar").classList.add("search-mode"); document.getElementById("adSliderBar").style.display = "none"; document.getElementById("searchInput").focus(); }
-function deactivateGlobalSearch() { document.body.classList.remove('search-mode-active'); document.getElementById("navbar").classList.remove("search-mode"); document.getElementById("globalSearchResultsSection").classList.remove("active"); document.getElementById("globalSearchCloseBtn").classList.remove("show"); document.getElementById("searchInput").value = ""; document.getElementById("globalSearchResultsGrid").innerHTML = ''; document.getElementById("suggestionsDropdown")?.classList.remove("active"); const currentActivePage = document.querySelector('.page-container.active-page, .home-page-container.active-page'); if(currentActivePage) { currentActivePage.style.display = 'block'; } else { document.getElementById("homePage").style.display = 'block'; document.getElementById("homePage").classList.add('active-page'); } if(document.getElementById("homePage").style.display === 'block') { document.getElementById("adSliderBar").style.display = "flex"; } }
+function deactivateGlobalSearch() { document.body.classList.remove('search-mode-active'); document.getElementById("navbar").classList.remove("search-mode"); document.getElementById("globalSearchResultsSection").classList.remove("active"); document.getElementById("searchInput").value = ""; document.getElementById("globalSearchResultsGrid").innerHTML = ''; document.getElementById("suggestionsDropdown")?.classList.remove("active"); const currentActivePage = document.querySelector('.page-container.active-page, .home-page-container.active-page'); if(currentActivePage && currentActivePage.style.display !== 'none') { currentActivePage.style.display = 'block'; } else { document.getElementById("homePage").style.display = 'block'; document.getElementById("homePage").classList.add('active-page'); document.getElementById("adSliderBar").style.display = "flex"; } }
 
 // PAGE NAVIGATION
 function showPage(pageName) {
@@ -4463,7 +4736,21 @@ function trackOrder() {
 // CONTACT FORM
 function initContactForm() {
     const form = document.getElementById('contactForm');
-    if(form) form.onsubmit = (e) => { e.preventDefault(); showToast('Message sent! We will reply soon.'); form.reset(); };
+    if(form) form.onsubmit = (e) => { 
+        e.preventDefault(); 
+        const name = document.getElementById('contactName').value.trim();
+        const email = document.getElementById('contactEmail').value.trim();
+        const phone = document.getElementById('contactPhone').value.trim();
+        const message = document.getElementById('contactMessage').value.trim();
+        
+        if (!name || name.length < 3) { showToast('Please enter a valid name (min 3 characters)', true); return; }
+        if (!validateEmail(email)) { showToast('Please enter a valid email address.', true); return; }
+        if (phone && !validatePhone(phone)) { showToast('Please enter a valid 10-digit phone number.', true); return; }
+        if (!message || message.length < 10) { showToast('Please enter a message (min 10 characters)', true); return; }
+        
+        showToast('Message sent! We will reply soon.'); 
+        form.reset(); 
+    };
 }
 
 // POLICY TABS
@@ -4521,7 +4808,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('profileIconBtn').onclick = () => showPage('account');
     document.getElementById('searchIconBtn').onclick = activateGlobalSearch;
     document.getElementById('searchCloseBtn').onclick = deactivateGlobalSearch;
-    document.getElementById('globalSearchCloseBtn').onclick = deactivateGlobalSearch;
     document.getElementById('searchSubmitBtn').onclick = (e) => { e.preventDefault(); handleGlobalSearch(); };
     document.getElementById('searchInput').addEventListener('input', showSuggestionsGlobal);
     document.getElementById('searchInput').addEventListener('keypress', (e) => { if(e.key === "Enter") { e.preventDefault(); handleGlobalSearch(); } });
@@ -4583,9 +4869,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if(contactForm) contactForm.onsubmit = (e) => { e.preventDefault(); showToast('Message sent! We will reply soon.'); contactForm.reset(); };
     
     const bulkOrderForm = document.getElementById('bulkOrderForm');
-    if(bulkOrderForm) bulkOrderForm.onsubmit = (e) => { e.preventDefault(); showToast('Bulk order request submitted! We will contact you soon.'); bulkOrderForm.reset(); };
+    if(bulkOrderForm) bulkOrderForm.onsubmit = (e) => { 
+        e.preventDefault(); 
+        const company = bulkOrderForm.querySelector('input[type="text"]').value.trim();
+        const email = bulkOrderForm.querySelector('input[type="email"]').value.trim();
+        const phone = bulkOrderForm.querySelector('input[type="tel"]').value.trim();
+        
+        if (!company || company.length < 3) { showToast('Please enter a valid company name (min 3 characters)', true); return; }
+        if (!validateEmail(email)) { showToast('Please enter a valid email address.', true); return; }
+        if (!validatePhone(phone)) { showToast('Please enter a valid 10-digit phone number.', true); return; }
+        
+        showToast('Bulk order request submitted! We will contact you soon.'); 
+        bulkOrderForm.reset(); 
+    };
     
-    document.getElementById('loginNowBtn').onclick = () => { hideLoginModal(); localStorage.setItem('pendingOrder', JSON.stringify({})); window.location.href = 'account.html?redirect=checkout'; };
+    document.getElementById('loginNowBtn').onclick = () => { hideLoginModal(); signInWithPopup(auth, provider).catch(err => alert('Login failed: ' + err.message)); };
     document.getElementById('cancelLoginBtn').onclick = () => { hideLoginModal(); };
 });
 
